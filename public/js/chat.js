@@ -31,8 +31,7 @@ const scrollOffset = $messages.scrollTop + visibleHeight
 
 if(containerHeight - newMessageHeight <= scrollOffset){
     $messages.scrollTop = $messages.scrollHeight
-}
-  
+} 
 }
 
 socket.on('message',(message)=>{
@@ -40,7 +39,7 @@ socket.on('message',(message)=>{
     const html = Mustache.render(messagetemplate,{
         username:message.username,
         message:message.text,
-        createdAt:moment(message.createdAt).format('h:mm  a')
+        createdAt: moment(message.createdAt).format('h:mm  a')
     })
     $messages.insertAdjacentHTML('beforeend',html)
     autoscroll()
@@ -68,9 +67,9 @@ socket.on('roomData',({room,users})=>{
 $messageForm.addEventListener('submit',(e)=>{
    e.preventDefault();
    $messageFormButton.setAttribute('disabled' , 'disabled')
-   const messages = e.target.elements.formtext.value
+   const message = e.target.elements.formtext.value
 
-   socket.emit('sendMessage' , messages,(error)=>{
+   socket.emit('sendMessage' , message ,(error)=>{
        $messageFormButton.removeAttribute('disabled')
        $messageFormInput.value=''
        $messageFormInput.focus()

@@ -18,22 +18,21 @@ app.use(express.static(publicDirpath))
 io.on('connection',(socket)=>{
  console.log('new websocket connection')
 
-
  socket.on('join',(options,callback)=>{
      const {error,user} = addUser({id:socket.id , ...options})
      if(error){
          return callback(error)
      }
      socket.join(user.room)
+     
      socket.emit('message',generateMessage('Admin' , 'welcome'))
-     socket.broadcast.to(user.room).emit('message',generateMessage(`${user.username} has joined`))
+     socket.broadcast.to(user.room).emit('message',generateMessage('Admin',`${user.username} has joined`))
      io.to(user.room).emit('roomData',{
          room:user.room,
          users:getUsersInRoom(user.room)
      })
      callback()
  })
-
 
  socket.on('sendMessage',(message,callback)=>{
      const user = getUser(socket.id)
@@ -44,7 +43,6 @@ io.on('connection',(socket)=>{
      io.to(user.room).emit('message',generateMessage(user.username,message))
      callback()
  })
-
 
 socket.on('sendLocation', (coords,callback) => {
     const user = getUser(socket.id)
